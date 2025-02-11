@@ -24,6 +24,7 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("detaile")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -34,9 +35,15 @@ struct ContentView: View {
                     }
                 }
             }
-        } detail: {
+        }
+        detail: {
             Text("Select an item")
         }
+        
+        NavigationStack {
+            ImageUploaderView()
+        }
+        
     }
 
     private func addItem() {
