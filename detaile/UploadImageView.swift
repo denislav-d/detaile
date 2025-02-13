@@ -4,7 +4,7 @@ import Vision
 import CoreImage
 import CoreImage.CIFilterBuiltins
 
-struct ImageUploaderView: View {
+struct UploadImageView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImage: UIImage? = nil
     @State private var processedImage: UIImage? = nil
@@ -59,6 +59,7 @@ struct ImageUploaderView: View {
             }
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private func fixImageOrientation(_ image: UIImage) -> UIImage {
@@ -136,8 +137,8 @@ struct ImageUploaderView: View {
     }
 }
 
-struct ImageUploaderView_Previews: PreviewProvider {
+struct UploadImageView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageUploaderView()
+        UploadImageView()
     }
 }

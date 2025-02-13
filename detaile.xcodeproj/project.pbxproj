@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		22F273A32D5C0D0B00BD0D0C /* SplashScreenKit in Frameworks */ = {isa = PBXBuildFile; productRef = 22F273A22D5C0D0B00BD0D0C /* SplashScreenKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2297838B2D5A9F620074649E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F273A32D5C0D0B00BD0D0C /* SplashScreenKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 				2297837A2D5A9F600074649E /* detaile */,
 				2297838D2D5A9F620074649E /* detaileTests */,
 				229783972D5A9F620074649E /* detaileUITests */,
+				22F273A12D5C0D0B00BD0D0C /* Frameworks */,
 				229783792D5A9F600074649E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +96,13 @@
 				229783942D5A9F620074649E /* detaileUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		22F273A12D5C0D0B00BD0D0C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +125,7 @@
 			);
 			name = detaile;
 			packageProductDependencies = (
+				22F273A22D5C0D0B00BD0D0C /* SplashScreenKit */,
 			);
 			productName = detaile;
 			productReference = 229783782D5A9F600074649E /* detaile.app */;
@@ -195,6 +209,9 @@
 			);
 			mainGroup = 2297836F2D5A9F600074649E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				22F273A02D5C09E800BD0D0C /* XCRemoteSwiftPackageReference "19-Splash-Screen-for-SwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 229783792D5A9F600074649E /* Products */;
 			projectDirPath = "";
@@ -558,6 +575,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		22F273A02D5C09E800BD0D0C /* XCRemoteSwiftPackageReference "19-Splash-Screen-for-SwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/1998code/19-Splash-Screen-for-SwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		22F273A22D5C0D0B00BD0D0C /* SplashScreenKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22F273A02D5C09E800BD0D0C /* XCRemoteSwiftPackageReference "19-Splash-Screen-for-SwiftUI" */;
+			productName = SplashScreenKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 229783702D5A9F600074649E /* Project object */;
 }

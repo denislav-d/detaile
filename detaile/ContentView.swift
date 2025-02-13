@@ -1,62 +1,53 @@
-//
-//  ContentView.swift
-//  detaile
-//
-//  Created by Denislav Dimitrov on 10.02.25.
-//
-
 import SwiftUI
 import SwiftData
+import SplashScreenKit
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-
+    @State private var showSplash = true
+    @Namespace private var animation
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        ZStack {
+            UploadImageView()
+                .navigationBarTitleDisplayMode(.large)
+                .safeAreaInset(edge: .top) {
+                    if !showSplash {
+                        Text("detaile")
+                            .font(.largeTitle.bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                            .matchedGeometryEffect(id: "title", in: animation)
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .navigationTitle("detaile")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                .opacity(showSplash ? 0 : 1)
+
+            if showSplash {
+                SplashScreen(
+                    images: [
+                        Photo("1"),
+                        Photo("2"),
+                        Photo("3"),
+                        Photo("4"),
+                        Photo("5")
+                    ],
+                    title: "Your AI stylist",
+                    product: "detaile",
+                    caption: "Always up to date",
+                    cta: "Get started"
+                ) {
+                    withAnimation(.spring(response: 0.9, dampingFraction: 0.8)) {
+                        showSplash = false
                     }
                 }
-            }
-        }
-        detail: {
-            Text("Select an item")
-        }
-        
-        NavigationStack {
-            ImageUploaderView()
-        }
-        
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+                .overlay(
+                    Text("detaile")
+                        .font(.largeTitle.bold())
+                        .matchedGeometryEffect(id: "title", in: animation)
+                        .opacity(0)
+                        .padding(.top, 500)
+                )
             }
         }
     }
