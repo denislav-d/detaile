@@ -10,7 +10,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            UploadImageView()
+            MainView()
                 .navigationBarTitleDisplayMode(.large)
                 .safeAreaInset(edge: .top) {
                     if !showSplash {
