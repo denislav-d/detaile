@@ -11,55 +11,61 @@ struct UploadImageView: View {
     @State private var isProcessing: Bool = false
     
     private let processingQueue = DispatchQueue(label: "ProcessingQueue")
-    
+
     var body: some View {
-        VStack {
-            if let imageToShow = processedImage ?? selectedImage {
-                Image(uiImage: imageToShow)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 300)
-                    .cornerRadius(10)
-                    .padding()
-            } else {
-                Text("No image selected")
-                    .foregroundColor(.gray)
-            }
-            
-            PhotosPicker(selection: $selectedItem, matching: .images) {
-                Text("Select an Image")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-            }
-            .onChange(of: selectedItem) {
-                Task {
-                    if let selectedItem, let data = try? await selectedItem.loadTransferable(type: Data.self),
-                       let uiImage = UIImage(data: data) {
-                        selectedImage = fixImageOrientation(uiImage)
-                        processedImage = nil // Reset processed image
+        NavigationStack {
+            List {
+                Section() {
+                    VStack(alignment: .center, spacing: 12) {
+                        Image(systemName: "tshirt")
+                            .font(.system(size: 22))
+                            .frame(width: 20, height: 20)
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(Color.secondary)
+                            .cornerRadius(12)
+                        Text("New items")
+                            .font(.title2)
+                            .bold()
+                        Text("Add new items to your virtual wardrobe by uploading images here. Try to take the photos of your clothing items without any other items in the background.")
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.vertical)
+                }
+                if let imageToShow = processedImage ?? selectedImage {
+                    Image(uiImage: imageToShow)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 300)
+                        .cornerRadius(10)
+                        .padding()
+                }
+                
+                PhotosPicker(selection: $selectedItem, matching: .images) {
+                    if (selectedImage != nil) {
+                        Text("Upload another image")
+                    } else {
+                        Text("Upload an image")
                     }
                 }
-            }
-            
-            if selectedImage != nil {
-                Button(action: removeBackground) {
-                    Text(isProcessing ? "Processing..." : "Remove Background")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(isProcessing ? Color.gray : Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                .onChange(of: selectedItem) {
+                    Task {
+                        if let selectedItem, let data = try? await selectedItem.loadTransferable(type: Data.self),
+                           let uiImage = UIImage(data: data) {
+                            selectedImage = fixImageOrientation(uiImage)
+                            processedImage = nil // Reset processed image
+                        }
+                    }
                 }
-                .disabled(isProcessing)
+                
+                if selectedImage != nil {
+                    Button(action: removeBackground) {
+                        Text(isProcessing ? "Processing..." : "Remove Background")
+                    }
+                    .disabled(isProcessing)
+                }
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private func fixImageOrientation(_ image: UIImage) -> UIImage {

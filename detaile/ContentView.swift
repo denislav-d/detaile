@@ -11,17 +11,17 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             MainView()
-                .navigationBarTitleDisplayMode(.large)
-                .safeAreaInset(edge: .top) {
-                    if !showSplash {
-                        Text("detaile")
-                            .font(.largeTitle.bold())
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                            .matchedGeometryEffect(id: "title", in: animation)
-                    }
-                }
-                .opacity(showSplash ? 0 : 1)
+//                .navigationBarTitleDisplayMode(.large)
+//                .safeAreaInset(edge: .top) {
+//                    if !showSplash {
+//                        Text("detaile")
+//                            .font(.largeTitle.bold())
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .padding()
+//                            .matchedGeometryEffect(id: "title", in: animation)
+//                    }
+//                }
+//                .opacity(showSplash ? 0 : 1)
 
             if showSplash {
                 SplashScreen(

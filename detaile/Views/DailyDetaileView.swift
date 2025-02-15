@@ -11,7 +11,11 @@ struct DailyDetaileView: View {
     var selectedTab: Binding<String>
     
     var body: some View {
-        Text("explore daily outfit recommendations")
+        NavigationStack {
+            Text("explore daily outfit recommendations")
+            
+                .navigationTitle("detaile")
+        }
     }
 }
 
