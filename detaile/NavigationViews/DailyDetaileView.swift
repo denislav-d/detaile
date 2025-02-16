@@ -13,7 +13,6 @@ struct DailyDetaileView: View {
     var body: some View {
         NavigationStack {
             Text("explore daily outfit recommendations")
-            
                 .navigationTitle("detaile")
         }
     }

@@ -12,13 +12,13 @@ struct MainView: View {
     
     var body: some View {
         VStack {
-            TabView(selection: $selectedTab){
+            TabView(selection: $selectedTab) {
                 DailyDetaileView(selectedTab: $selectedTab)
                     .tabItem { Label("Daily detaile", systemImage: "sparkles") }
                     .tag("Daily detaile")
                 
                 WardrobeView(selectedTab: $selectedTab)
-                    .tabItem { Label("Moodboard", systemImage: "tshirt") }
+                    .tabItem { Label("Moodboard", systemImage: "tshirt")}
                     .tag("Moodboard")
                     .badge(1)
                 
@@ -30,15 +30,13 @@ struct MainView: View {
                     .tabItem { Label("Account", systemImage: "person.fill") }
                     .tag("Account")
             }
+            .tint(.indigo)
             .onAppear {
                 if #available(iOS 15.0, *) {
                     let appearance = UITabBarAppearance()
                     UITabBar.appearance().scrollEdgeAppearance = appearance
                 }
             }
-//            .toolbar {
-//                Text(selectedTab: $selectedTab)
-//            }
         }
     }
 }
