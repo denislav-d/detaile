@@ -57,7 +57,6 @@ struct CategoryView: View {
                         NavigationLink(destination: CategoryDetailView(category: category, favorites: $favorites)) {
                             Text(category.name)
                                 .font(.headline)
-                                .padding()
                         }
                     }
                 } else {
@@ -109,10 +108,13 @@ struct CategoryDetailView: View {
 
     var body: some View {
         VStack {
-            Button("Refine") {
-                showRefineSheet.toggle()
+            HStack {
+                Button("Refine", systemImage: "line.3.horizontal.decrease") {
+                    showRefineSheet.toggle()
+                }
+                .padding()
+                Spacer()
             }
-            .padding()
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15) {
@@ -239,6 +241,7 @@ struct ItemCard: View {
         }
         .sheet(isPresented: $showDetail) {
             ItemDetailView(item: item, favorites: $favorites)
+            .presentationDragIndicator(.visible)
         }
     }
 }
@@ -250,41 +253,63 @@ struct ItemDetailView: View {
     var isFavorited: Bool {
         favorites.contains { $0.id == item.id }
     }
-
+    
     var body: some View {
-        VStack {
-            Image(item.imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 300)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text(item.title).font(.title).bold()
-                Text("Color: \(item.color)").font(.headline)
-                Text("Type: \(item.type)").font(.subheadline)
-                Text("Brand: \(item.brand)").font(.subheadline)
-                Text(item.note).italic().font(.caption)
-
-                Button(action: {
-                    if isFavorited {
-                        favorites.removeAll { $0.id == item.id }
-                    } else {
-                        favorites.append(item)
+        ScrollView {
+            VStack(spacing: 20) {
+                Image(item.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 300)
+                    .shadow(radius: 5)
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text(item.title)
+                        .font(.title)
+                        .bold()
+                    
+                    Text(item.brand)
+                        .font(.headline)
+                        .foregroundColor(.secondary)
+                    
+                    Text("\(item.color) • \(item.type)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    
+                    Divider()
+                    
+                    Text(item.note)
+                        .font(.body)
+                        .italic()
+                        .foregroundColor(.secondary)
+                    
+                    Divider()
+                    
+                    Button(action: {
+                        if isFavorited {
+                            favorites.removeAll { $0.id == item.id }
+                        } else {
+                            favorites.append(item)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: isFavorited ? "heart.fill" : "heart")
+                            Text(isFavorited ? "Remove from Favorites" : "Add to Favorites")
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(10)
                     }
-                }) {
-                    HStack {
-                        Image(systemName: isFavorited ? "heart.fill" : "heart")
-                            .foregroundColor(.red)
-                        Text(isFavorited ? "Remove from Favorites" : "Add to Favorites")
-                            .foregroundColor(.blue)
-                    }
+                    .foregroundColor(.blue)
                 }
-                .padding(.top, 10)
+                .padding()
             }
             .padding()
         }
     }
 }
+
 
 struct FavoritesView: View {
     @Binding var favorites: [WardrobeItem]
