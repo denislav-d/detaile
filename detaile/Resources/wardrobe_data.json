@@ -1,0 +1,73 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "Outerwear",
+    "icon": "jacket",
+    "items": [
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "title": "Jeans",
+        "colors": ["Blue", "Pink"],
+        "type": "Denim",
+        "note": "Casual style",
+        "imageName": "1",
+        "brand": "Acne Studios",
+        "dateAdded": "2024-02-15T12:00:00Z"
+      },
+      {
+        "id": "550e8400-e29b-41d4-a716-446655440002",
+        "title": "Denim Jacket",
+        "colors": ["Blue"],
+        "type": "Jacket",
+        "note": "Everyday wear",
+        "imageName": "2",
+        "brand": "BrandB",
+        "dateAdded": "2024-02-14T12:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440000",
+    "name": "Shoes",
+    "icon": "shoe.2",
+    "items": [
+      {
+        "id": "660e8400-e29b-41d4-a716-446655440001",
+        "title": "Sneakers",
+        "colors": ["White"],
+        "type": "Casual",
+        "note": "Comfortable sneakers",
+        "imageName": "3",
+        "brand": "BrandA",
+        "dateAdded": "2024-02-13T12:00:00Z"
+      },
+      {
+        "id": "660e8400-e29b-41d4-a716-446655440002",
+        "title": "Loafers",
+        "colors": ["Brown"],
+        "type": "Formal",
+        "note": "Great for work",
+        "imageName": "4",
+        "brand": "BrandC",
+        "dateAdded": "2024-02-12T12:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440000",
+    "name": "Accessories",
+    "icon": "sunglasses",
+    "items": [
+      {
+        "id": "770e8400-e29b-41d4-a716-446655440001",
+        "title": "Sunglasses",
+        "colors": ["Black"],
+        "type": "Eyewear",
+        "note": "Perfect for sunny days",
+        "imageName": "5",
+        "brand": "BrandC",
+        "dateAdded": "2024-02-11T12:00:00Z"
+      }
+    ]
+  }
+]
