@@ -17,7 +17,7 @@ struct MainView: View {
                     .tabItem { Label("Daily detaile", systemImage: "sparkles") }
                     .tag("Daily detaile")
                 
-                WardrobeView(selectedTab: $selectedTab)
+                MoodboardView(selectedTab: $selectedTab)
                     .tabItem { Label("Moodboard", systemImage: "tshirt")}
                     .tag("Moodboard")
                     .badge(1)
@@ -26,7 +26,7 @@ struct MainView: View {
                     .tabItem { Label("Wardrobe", systemImage: "cabinet") }
                     .tag("Wardrobe")
                 
-                WardrobeView(selectedTab: $selectedTab)
+                UploadImageView()
                     .tabItem { Label("Account", systemImage: "person.fill") }
                     .tag("Account")
             }
