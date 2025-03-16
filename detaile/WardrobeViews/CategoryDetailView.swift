@@ -6,28 +6,26 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CategoryDetailView: View {
     let category: WardrobeCategory
     @Binding var favorites: [WardrobeItem]
 
-    // Sort/Filter State
     @State private var selectedSort: SortOption = .recentlyAdded
     @State private var selectedColor: String? = nil
     @State private var selectedBrand: String? = nil
     @State private var selectedType: String? = nil
     @State private var showRefineSheet = false
+    @State private var isPresentingAddItem = false
 
     let columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 3)
 
     var sortedAndFilteredItems: [WardrobeItem] {
-        // 1. Filter
         var filtered = category.items
-
+        
         if let selectedColor = selectedColor {
-            filtered = filtered.filter { item in
-                item.colors.contains(selectedColor)
-            }
+            filtered = filtered.filter { $0.colors.contains(selectedColor) }
         }
         if let brand = selectedBrand {
             filtered = filtered.filter { $0.brand == brand }
@@ -35,8 +33,7 @@ struct CategoryDetailView: View {
         if let type = selectedType {
             filtered = filtered.filter { $0.type == type }
         }
-
-        // 2. Sort
+        
         switch selectedSort {
         case .recentlyAdded:
             return filtered.sorted { $0.dateAdded > $1.dateAdded }
@@ -50,17 +47,20 @@ struct CategoryDetailView: View {
     var body: some View {
         VStack {
             HStack {
-                Button("Refine", systemImage: "line.3.horizontal.decrease") {
+                Button {
                     showRefineSheet.toggle()
+                } label: {
+                    Label("Refine", systemImage: "line.3.horizontal.decrease")
                 }
                 .padding()
                 Spacer()
             }
-
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 15) {
                     ForEach(sortedAndFilteredItems) { item in
-                        ItemCard(item: item, favorites: $favorites)
+                        NavigationLink(destination: WardrobeItemDetailView(item: item, favorites: $favorites)) {
+                            WardrobeItemCard(item: item)
+                        }
                     }
                 }
                 .padding()
@@ -77,9 +77,21 @@ struct CategoryDetailView: View {
             )
             .presentationDetents([.height(500), .large])
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingAddItem = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $isPresentingAddItem) {
+            AddItemView()
+        }
     }
 }
 
-//#Preview {
-//    CategoryDetailView()
-//}
+// Dummy implementations for required types/views:
+
+enum SortOption { case recentlyAdded, aToZ, zToA }

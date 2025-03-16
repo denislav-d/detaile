@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CategoryView: View {
-    @StateObject private var viewModel = WardrobeViewModel()
+    @Query private var categories: [WardrobeCategory]
     @State private var selectedTab = 0
+    @State private var favorites: [WardrobeItem] = []
+    @State private var isPresentingAddItem = false
 
     var body: some View {
         NavigationStack {
@@ -22,8 +25,8 @@ struct CategoryView: View {
                 .padding()
 
                 if selectedTab == 0 {
-                    List(viewModel.categories) { category in
-                        NavigationLink(destination: CategoryDetailView(category: category, favorites: $viewModel.favorites)) {
+                    List(categories) { category in
+                        NavigationLink(destination: CategoryDetailView(category: category, favorites: $favorites)) {
                             HStack {
                                 Image(systemName: category.icon)
                                 Text(category.name)
@@ -33,14 +36,27 @@ struct CategoryView: View {
                         }
                     }
                 } else {
-                    FavoritesView(favorites: $viewModel.favorites)
+                    FavoritesView(favorites: $favorites)
                 }
             }
             .navigationTitle("Wardrobe")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPresentingAddItem = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isPresentingAddItem) {
+                AddItemView()
+            }
         }
     }
 }
 
 #Preview {
     CategoryView()
+        .modelContainer(for: [WardrobeItem.self, WardrobeCategory.self], inMemory: true)
 }

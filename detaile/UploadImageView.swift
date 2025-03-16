@@ -3,11 +3,12 @@ import PhotosUI
 import Vision
 import CoreImage
 import CoreImage.CIFilterBuiltins
+import SwiftData
 
 struct UploadImageView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImage: UIImage? = nil
-    @State private var processedImage: UIImage? = nil
     @State private var isProcessing: Bool = false
     
     private let processingQueue = DispatchQueue(label: "ProcessingQueue")
@@ -15,7 +16,7 @@ struct UploadImageView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section() {
+                Section {
                     VStack(alignment: .center, spacing: 12) {
                         Image(systemName: "tshirt")
                             .font(.system(size: 22))
@@ -27,13 +28,14 @@ struct UploadImageView: View {
                         Text("New items")
                             .font(.title2)
                             .bold()
-                        Text("Add new items to your virtual wardrobe by uploading images here. Try to take the photos of your clothing items without any other items in the background.")
+                        Text("Add new items to your virtual wardrobe by uploading images here. Try to take photos of your clothing items without any other items in the background.")
                             .multilineTextAlignment(.center)
                     }
                     .padding(.vertical)
                 }
-                if let imageToShow = processedImage ?? selectedImage {
-                    Image(uiImage: imageToShow)
+                
+                if let image = selectedImage {
+                    Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 300)
@@ -42,7 +44,7 @@ struct UploadImageView: View {
                 }
                 
                 PhotosPicker(selection: $selectedItem, matching: .images) {
-                    if (selectedImage != nil) {
+                    if selectedImage != nil {
                         Text("Upload another image")
                     } else {
                         Text("Upload an image")
@@ -50,62 +52,43 @@ struct UploadImageView: View {
                 }
                 .onChange(of: selectedItem) {
                     Task {
-                        if let selectedItem, let data = try? await selectedItem.loadTransferable(type: Data.self),
+                        if let selectedItem,
+                           let data = try? await selectedItem.loadTransferable(type: Data.self),
                            let uiImage = UIImage(data: data) {
                             selectedImage = fixImageOrientation(uiImage)
-                            processedImage = nil // Reset processed image
+                            removeBackground()
                         }
                     }
                 }
                 
-                if selectedImage != nil {
-                    Button(action: removeBackground) {
-                        Text(isProcessing ? "Processing..." : "Remove Background")
-                    }
-                    .disabled(isProcessing)
+                if isProcessing {
+                    ProgressView("Processing...")
                 }
             }
         }
     }
     
     private func fixImageOrientation(_ image: UIImage) -> UIImage {
-        // Check if the image needs fixing
-        if image.imageOrientation == .up {
-            return image
-        }
-        
-        // Create drawing context
+        if image.imageOrientation == .up { return image }
         UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
         image.draw(in: CGRect(origin: .zero, size: image.size))
-        
-        // Get normalized image
         let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
         return normalizedImage ?? image
     }
     
     private func removeBackground() {
-        guard let selectedImage = selectedImage,
-              let inputCIImage = CIImage(image: selectedImage) else {
-            print("Failed to create CIImage")
-            return
-        }
-        
+        guard let inputImage = selectedImage, let ciImage = CIImage(image: inputImage) else { return }
         isProcessing = true
         
         processingQueue.async {
-            let handler = VNImageRequestHandler(ciImage: inputCIImage)
+            let handler = VNImageRequestHandler(ciImage: ciImage)
             let request = VNGenerateForegroundInstanceMaskRequest()
             
             do {
                 try handler.perform([request])
-                
                 guard let result = request.results?.first else {
-                    print("No observations found")
-                    DispatchQueue.main.async {
-                        isProcessing = false
-                    }
+                    DispatchQueue.main.async { isProcessing = false }
                     return
                 }
                 
@@ -113,33 +96,39 @@ struct UploadImageView: View {
                 let maskCIImage = CIImage(cvPixelBuffer: maskPixelBuffer)
                 
                 let blendFilter = CIFilter.blendWithMask()
-                blendFilter.inputImage = inputCIImage
+                blendFilter.inputImage = ciImage
                 blendFilter.maskImage = maskCIImage
-                blendFilter.backgroundImage = CIImage(color: .clear).cropped(to: inputCIImage.extent)
+                blendFilter.backgroundImage = CIImage(color: .clear).cropped(to: ciImage.extent)
                 
                 guard let outputCIImage = blendFilter.outputImage,
                       let cgImage = CIContext().createCGImage(outputCIImage, from: outputCIImage.extent) else {
-                    print("Failed to create output image")
-                    DispatchQueue.main.async {
-                        isProcessing = false
-                    }
+                    DispatchQueue.main.async { isProcessing = false }
                     return
                 }
                 
-                // Create final image with proper orientation
-                let finalImage = UIImage(cgImage: cgImage, scale: selectedImage.scale, orientation: .up)
-                
+                let finalImage = UIImage(cgImage: cgImage, scale: inputImage.scale, orientation: .up)
                 DispatchQueue.main.async {
-                    self.processedImage = finalImage
+                    self.selectedImage = finalImage
                     self.isProcessing = false
+                    self.saveWardrobeItem(with: finalImage)
                 }
             } catch {
-                print("Error during background removal: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.isProcessing = false
-                }
+                DispatchQueue.main.async { isProcessing = false }
             }
         }
+    }
+    
+    private func saveWardrobeItem(with image: UIImage) {
+        guard let imageData = image.pngData() else { return }
+        // Create a new WardrobeItem with default values. You can later add an edit screen for more details.
+        let newItem = WardrobeItem(title: "New Item",
+                                   brand: "Unknown",
+                                   colors: [],
+                                   type: "Unknown",
+                                   note: "",
+                                   imageData: imageData,
+                                   dateAdded: Date())
+        modelContext.insert(newItem)
     }
 }
 

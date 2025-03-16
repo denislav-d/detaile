@@ -3,26 +3,12 @@ import SwiftData
 import SplashScreenKit
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
     @State private var showSplash = true
     @Namespace private var animation
-    
+
     var body: some View {
         ZStack {
-            MainView()
-//                .navigationBarTitleDisplayMode(.large)
-//                .safeAreaInset(edge: .top) {
-//                    if !showSplash {
-//                        Text("detaile")
-//                            .font(.largeTitle.bold())
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                            .padding()
-//                            .matchedGeometryEffect(id: "title", in: animation)
-//                    }
-//                }
-//                .opacity(showSplash ? 0 : 1)
-
+            // When splash is done, show the category view (the main app)
             if showSplash {
                 SplashScreen(
                     images: [
@@ -48,6 +34,10 @@ struct ContentView: View {
                         .opacity(0)
                         .padding(.top, 500)
                 )
+            } else {
+                // Replace MainView() with CategoryView now that the SwiftData logic is here.
+                MainView()
+                PreloadDataView()
             }
         }
     }
@@ -55,5 +45,19 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: [WardrobeItem.self, WardrobeCategory.self], inMemory: true)
+}
+
+
+struct PreloadDataView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var categories: [WardrobeCategory]
+    
+    var body: some View {
+        Color.clear.onAppear {
+            if categories.isEmpty {
+                WardrobeCategory.defaultCategories.forEach { modelContext.insert($0) }
+            }
+        }
+    }
 }

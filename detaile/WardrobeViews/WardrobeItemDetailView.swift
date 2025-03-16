@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import SwiftData
 
-struct ItemDetailView: View {
+struct WardrobeItemDetailView: View {
     let item: WardrobeItem
     @Binding var favorites: [WardrobeItem]
     
@@ -18,11 +19,17 @@ struct ItemDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Image(item.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 300)
-                    .shadow(radius: 5)
+                if let data = item.imageData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 300)
+                        .shadow(radius: 5)
+                } else {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(height: 300)
+                }
                 
                 VStack(alignment: .leading, spacing: 15) {
                     Text(item.title)
@@ -33,7 +40,7 @@ struct ItemDetailView: View {
                         .font(.headline)
                         .foregroundColor(.secondary)
                     
-                    Text("\(item.colors.joined(separator: "• ")) • \(item.type)")
+                    Text(item.colors.joined(separator: " • ") + " • " + item.type)
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     
@@ -70,7 +77,3 @@ struct ItemDetailView: View {
         }
     }
 }
-
-//#Preview {
-//    ItemDetailView()
-//}
