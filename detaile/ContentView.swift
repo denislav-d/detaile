@@ -8,7 +8,6 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            // When splash is done, show the category view (the main app)
             if showSplash {
                 SplashScreen(
                     images: [
@@ -35,7 +34,6 @@ struct ContentView: View {
                         .padding(.top, 500)
                 )
             } else {
-                // Replace MainView() with CategoryView now that the SwiftData logic is here.
                 MainView()
                 PreloadDataView()
             }

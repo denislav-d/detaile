@@ -26,7 +26,7 @@ struct MainView: View {
                     .tabItem { Label("Wardrobe", systemImage: "cabinet") }
                     .tag("Wardrobe")
                 
-                UploadImageView()
+                AccountView(selectedTab: $selectedTab)
                     .tabItem { Label("Account", systemImage: "person.fill") }
                     .tag("Account")
             }

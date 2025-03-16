@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct AccountView: View {
+    var selectedTab: Binding<String>
+    
     var body: some View {
-        Text("Account")
+        NavigationStack {
+            Text("my account")
+                .navigationTitle("Account")
+        }
     }
 }
 
 #Preview {
-    AccountView()
+    AccountView(selectedTab: .constant("Account"))
 }

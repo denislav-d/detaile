@@ -14,9 +14,6 @@ struct WardrobeView: View {
     
     var body: some View {
         NavigationStack {
-//            NavigationLink("Add clothes") {
-//                UploadImageView()
-//            }
             CategoryView()
             .navigationTitle(Text("Wardrobe"))
         }

@@ -16,9 +16,9 @@ class WardrobeItem: Identifiable {
     var colors: [String]
     var type: String
     var note: String
-    var imageData: Data? // Your processed image stored as Data
+    var imageData: Data?
     var dateAdded: Date
-    var category: WardrobeCategory?  // Optional relationship
+    var category: WardrobeCategory?
 
     init(title: String,
          brand: String,
@@ -44,7 +44,7 @@ class WardrobeItem: Identifiable {
 class WardrobeCategory: Identifiable {
     var id: UUID
     var name: String
-    // Include an icon property if desired
+ 
     var icon: String
     var items: [WardrobeItem]
 

@@ -35,9 +35,9 @@ struct WardrobeItemCard: View {
             if let data = item.imageData, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
-                                  .scaledToFill()
-                                    .frame(height: 150)
-                                   .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .scaledToFill()
+                    .frame(height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
             } else {
                 Rectangle()
                     .fill(Color.gray)

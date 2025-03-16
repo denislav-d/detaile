@@ -1,5 +1,5 @@
 //
-//  ItemDetailView.swift
+//  WardrobeItemDetailView.swift
 //  detaile
 //
 //  Created by Denislav Dimitrov on 24.02.25.

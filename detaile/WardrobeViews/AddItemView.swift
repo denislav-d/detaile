@@ -15,7 +15,7 @@ import SwiftData
 struct AddItemView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-
+    
     @State private var title: String = ""
     @State private var brand: String = ""
     @State private var colors: String = ""
