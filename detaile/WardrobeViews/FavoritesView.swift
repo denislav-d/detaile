@@ -20,16 +20,14 @@ struct FavoritesView: View {
                     .padding()
             } else {
                 ScrollView {
-//                    LazyVGrid(columns: columns, spacing: 15) {
-//                        ForEach(favorites) { item in
-//                            Image(item.imageName)
-//                                .resizable()
-//                                .scaledToFill()
-//                                .frame(height: 150)
-//                                .clipShape(RoundedRectangle(cornerRadius: 15))
-//                        }
-//                    }
-//                    .padding()
+                    LazyVGrid(columns: columns, spacing: 15) {
+                        ForEach(favorites) { item in
+                            NavigationLink(destination: WardrobeItemDetailView(item: item, favorites: $favorites)) {
+                                WardrobeItemCard(item: item)
+                            }
+                        }
+                    }
+                    .padding()
                 }
             }
         }
@@ -37,6 +35,6 @@ struct FavoritesView: View {
     }
 }
 
-//#Preview {
-//    FavoritesView(favorites: "")
-//}
+#Preview {
+    FavoritesView(favorites: .constant([]))
+}

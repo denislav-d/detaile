@@ -62,9 +62,15 @@ struct CategoryDetailView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 15) {
                         ForEach(sortedAndFilteredItems) { item in
-                            ItemCardEdit(item: item, isEditing: isEditing) {
-                                itemToDelete = item
-                                showDeleteConfirmation = true
+                            if isEditing {
+                                ItemEditView(item: item, isEditing: isEditing) {
+                                    itemToDelete = item
+                                    showDeleteConfirmation = true
+                                }
+                            } else {
+                                NavigationLink(destination: WardrobeItemDetailView(item: item, favorites: $favorites)) {
+                                    WardrobeItemCard(item: item)
+                                }
                             }
                         }
                     }
@@ -117,38 +123,5 @@ struct CategoryDetailView: View {
         }
     }
 }
-
-struct ItemCardEdit: View {
-    let item: WardrobeItem
-    let isEditing: Bool
-    let onDelete: () -> Void
-
-    var body: some View {
-        ZStack {
-            WardrobeItemCard(item: item)
-                .overlay(
-                    isEditing
-                        ? Color.black.opacity(0.6)
-                            .animation(.easeInOut(duration: 0.3))
-                            .cornerRadius(10)
-                        : nil
-                )
-                .allowsHitTesting(!isEditing)
-
-            if isEditing {
-                Button(action: onDelete) {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.system(size: 28))
-                        .foregroundColor(.red)
-                        .scaleEffect(isEditing ? 1.0 : 0.5)
-                        .opacity(isEditing ? 1 : 0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isEditing)
-                }
-                .position(x: 70, y: 70)
-            }
-        }
-    }
-}
-
 
 enum SortOption { case recentlyAdded, aToZ, zToA }

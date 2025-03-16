@@ -13,7 +13,7 @@ struct CategoryView: View {
     @State private var selectedTab = 0
     @State private var favorites: [WardrobeItem] = []
     @State private var isPresentingAddItem = false
-
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -23,7 +23,7 @@ struct CategoryView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
-
+                
                 if selectedTab == 0 {
                     List(categories) { category in
                         NavigationLink(destination: CategoryDetailView(category: category, favorites: $favorites)) {

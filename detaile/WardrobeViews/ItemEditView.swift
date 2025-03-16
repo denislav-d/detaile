@@ -8,11 +8,33 @@
 import SwiftUI
 
 struct ItemEditView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    let item: WardrobeItem
+    let isEditing: Bool
+    let onDelete: () -> Void
 
-#Preview {
-    ItemEditView()
+    var body: some View {
+        ZStack {
+            WardrobeItemCard(item: item)
+                .overlay(
+                    isEditing
+                        ? Color.black.opacity(0.6)
+                            .animation(.easeInOut(duration: 0.3))
+                            .cornerRadius(10)
+                        : nil
+                )
+                .allowsHitTesting(!isEditing)
+
+            if isEditing {
+                Button(action: onDelete) {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.system(size: 28))
+                        .foregroundColor(.red)
+                        .scaleEffect(isEditing ? 1.0 : 0.5)
+                        .opacity(isEditing ? 1 : 0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isEditing)
+                }
+                .position(x: 70, y: 70)
+            }
+        }
+    }
 }
