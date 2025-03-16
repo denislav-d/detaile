@@ -59,10 +59,10 @@ class WardrobeCategory: Identifiable {
 extension WardrobeCategory {
     static var defaultCategories: [WardrobeCategory] {
         [
-            WardrobeCategory(name: "Outerwear", icon: "tshirt.fill"),
-            WardrobeCategory(name: "Accessories", icon: "bag.fill"),
-            WardrobeCategory(name: "Shoes", icon: "shoeprints.fill"),
-            WardrobeCategory(name: "Pants", icon: "tag")
+            WardrobeCategory(name: "Outerwear", icon: "jacket"),
+            WardrobeCategory(name: "T-shirts", icon: "tshirt"),
+            WardrobeCategory(name: "Shoes", icon: "shoe.2"),
+            WardrobeCategory(name: "Accessories", icon: "sunglasses"),
         ]
     }
 }

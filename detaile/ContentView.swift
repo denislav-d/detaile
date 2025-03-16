@@ -53,9 +53,16 @@ struct PreloadDataView: View {
     
     var body: some View {
         Color.clear.onAppear {
-            if categories.isEmpty {
-                WardrobeCategory.defaultCategories.forEach { modelContext.insert($0) }
+            if categories.map(\.name) != WardrobeCategory.defaultCategories.map(\.name) {
+                // If categories don't match default, reset them
+                resetCategories()
             }
         }
     }
+    
+    private func resetCategories() {
+        categories.forEach { modelContext.delete($0) } // Remove old categories
+        WardrobeCategory.defaultCategories.forEach { modelContext.insert($0) } // Insert new ones
+    }
 }
+

@@ -34,6 +34,24 @@ struct AddItemView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    VStack(alignment: .center, spacing: 12) {
+                        Image(systemName: "tshirt")
+                            .font(.system(size: 22))
+                            .frame(width: 20, height: 20)
+                            .padding()
+                            .foregroundStyle(.white)
+                            .background(Color.secondary)
+                            .cornerRadius(12)
+                        Text("New items")
+                            .font(.title2)
+                            .bold()
+                        Text("Add new items to your virtual wardrobe by uploading images here. Try to take photos of your clothing items without any other items in the background.")
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.vertical)
+                }
+                
                 Section(header: Text("Item Details")) {
                     TextField("Title", text: $title)
                     TextField("Brand", text: $brand)
@@ -80,7 +98,6 @@ struct AddItemView: View {
                     }
                 }
             }
-            .navigationTitle("Add New Item")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
